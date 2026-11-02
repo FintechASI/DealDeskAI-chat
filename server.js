@@ -2,7 +2,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3050;
 
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -76,3 +76,4 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, () => {
   console.log(`DealDesk AI Chat website running at http://localhost:${PORT}`);
 });
+
