@@ -3,16 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>DealDesk AI — Chat</title>
-    <meta name="description" content="DealDesk AI — Commercial and Residential Mortgage Underwriting Intelligence and Automated Debt Advisory Chat." />
-    <meta property="og:title" content="DealDesk AI — Chat" />
-    <meta property="og:description" content="Universal commercial & residential mortgage underwriting advisor and real-time debt sizing desk." />
-    <meta property="og:type" content="website" />
+    <title>DealDesk AI — Commercial & Residential Loan Intelligence</title>
+    <meta name="description" content="DealDesk AI — Embedded Mortgage Chat & Document Analyzer." />
     <link rel="icon" type="image/png" href="./assets/dealdesk-chat-person-circle.png" />
     <link rel="apple-touch-icon" href="./assets/dealdesk-chat-person-circle.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <style>
       * {
         box-sizing: border-box;
@@ -22,51 +19,69 @@
         padding: 0;
         width: 100%;
         height: 100%;
-        background-color: #090d16;
-        color: #f8fafc;
+        background-color: #ffffff;
+        color: #1b1c20;
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         overflow: hidden;
       }
-      #loancity-ai-widget {
+      .chat-wrapper {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: #ffffff;
+      }
+      iframe.dealdesk-frame {
         width: 100%;
         height: 100%;
-        min-height: 100vh;
+        border: none;
+        background: #ffffff;
+        flex: 1;
       }
     </style>
   </head>
   <body>
+    <div class="chat-wrapper">
+      <!-- DealDesk AI — Embedded Mortgage Chat & Document Analyzer -->
+      <iframe
+        id="dealdesk-frame"
+        class="dealdesk-frame"
+        src="https://DealDeskAI.com/?embed=true&title=DealDesk%20AI&division=auto"
+        title="DealDesk AI — Commercial & Residential Loan Intelligence"
+        width="100%"
+        height="100%"
+        style="border: none; background: #ffffff;"
+        allow="camera; clipboard-write"
+      ></iframe>
+    </div>
+
     <!-- DealDesk AI — Universal Mortgage Website Drop-In Script -->
-    <div id="loancity-ai-widget" data-title="DealDesk AI" data-division="auto"></div>
+    <div id="loancity-ai-widget" data-title="DealDesk AI" data-division="auto" style="display:none;"></div>
     <script
       async
       src="https://DealDeskAI.com/widget.js"
       data-endpoint="https://DealDeskAI.com"
       data-title="DealDesk AI"
       data-division="auto"
-      onerror="if(!window.DealDeskAIWidget){var s=document.createElement('script');s.src='./widget.js';document.head.appendChild(s);}"
     ></script>
 
-    <!-- Reliable local fallback loader: activates ./widget.js seamlessly if remote script is unreachable -->
     <script>
       (function() {
-        var fallbackLoaded = false;
-        function loadFallback() {
-          if (fallbackLoaded || window.DealDeskAIWidget) return;
-          fallbackLoaded = true;
-          var s = document.createElement('script');
-          s.src = './widget.js';
-          document.head.appendChild(s);
+        var frame = document.getElementById('dealdesk-frame');
+        if (!frame) return;
+
+        // When running on localhost or in development, route to local DealDeskAI-studio engine (port 3020)
+        var isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        if (isLocal) {
+          frame.src = 'http://localhost:3020/?embed=true&title=DealDesk%20AI&division=auto';
         }
-        window.addEventListener('error', function(e) {
-          if (e.target && e.target.src && e.target.src.indexOf('widget.js') !== -1) {
-            loadFallback();
+
+        // Error detection: if iframe fails to load (e.g. DNS or offline), fallback gracefully
+        frame.addEventListener('error', function() {
+          if (isLocal && frame.src.indexOf('3020') === -1) {
+            frame.src = 'http://localhost:3020/?embed=true&title=DealDesk%20AI&division=auto';
           }
-        }, true);
-        setTimeout(function() {
-          if (!window.DealDeskAIWidget) {
-            loadFallback();
-          }
-        }, 1200);
+        });
       })();
     </script>
   </body>
